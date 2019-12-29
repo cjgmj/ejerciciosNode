@@ -1,3 +1,5 @@
+/*jshint esversion: 6 */
+
 function saludar(nombre) {
     let mensaje = `Hola ${nombre}`;
 

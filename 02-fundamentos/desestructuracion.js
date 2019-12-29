@@ -1,3 +1,5 @@
+/*jshint esversion: 6 */
+
 let deadpool = {
     nombre: 'Wade',
     apellido: 'Winston',

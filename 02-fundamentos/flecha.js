@@ -1,3 +1,5 @@
+/*jshint esversion: 6 */
+
 function sumar(a, b) {
     return a + b;
 }
