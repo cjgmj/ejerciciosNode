@@ -1,30 +1,29 @@
 /*jshint esversion: 6 */
 
 // requireds
-const fs = require('fs');
+const fs = require("fs");
+const colors = require("colors");
 
-// También se podria exportar poniendo module.exports.crearArchivo = ...
+// También se podría exportar poniendo module.exports.crearArchivo = ...
 let crearArchivo = (base, limite = 10) => {
-
     return new Promise((resolve, reject) => {
-
         // Al usar Number si se le pasa un número como un string lo interpreta como number
         if (!Number(base)) {
             reject(`El valor introducido ${base} no es un número`);
             return;
         }
 
-        let data = '';
+        let data = "";
 
         for (let i = 1; i <= limite; i++) {
             data += `${base} * ${i} = ${base * i}`;
 
             if (i != limite) {
-                data += '\n';
+                data += "\n";
             }
         }
 
-        fs.writeFile(`tabla-${base}-al-${limite}.txt`, data, (err) => {
+        fs.writeFile(`tabla-${base}-al-${limite}.txt`, data, err => {
             if (err) reject(err);
             else resolve(`tabla-${base}-al-${limite}.txt`);
         });
@@ -32,6 +31,9 @@ let crearArchivo = (base, limite = 10) => {
 };
 
 let listarTabla = (base, limite = 10) => {
+    console.log("==============================".green);
+    console.log(`========= Tabla de ${base} =========`.green);
+    console.log("==============================".green);
     if (!Number(base)) {
         console.log(`El valor introducido ${base} no es un número`);
         return;
