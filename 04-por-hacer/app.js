@@ -1,6 +1,7 @@
 /*jshint esversion: 6 */
 
 const argv = require('./config/yargs').argv;
+const colors = require("colors");
 
 const porHacer = require('./por-hacer/por-hacer');
 
@@ -12,7 +13,15 @@ switch (comando) {
         console.log(tarea);
         break;
     case 'listar':
-        console.log('Listar tareas');
+        let listado = porHacer.getListado();
+
+        for (let tarea of listado) {
+            console.log('==============================='.green);
+            console.log(tarea.descripcion);
+            console.log('Estado', tarea.completado);
+            console.log('==============================='.green);
+        }
+
         break;
     case 'actualizar':
         console.log('Actualizar tarea');
