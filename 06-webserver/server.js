@@ -3,15 +3,17 @@
 const express = require('express');
 const app = express();
 
-app.get('/', (req, res) => {
-    // res.send('Hola mundo');
+app.use(express.static(__dirname + '/public'));
 
-    let salida = {
-        nombre: 'cjgmj',
-        url: req.url
-    };
+// app.get('/', (req, res) => {
+//     // res.send('Hola mundo');
 
-    res.send(salida);
-});
+//     let salida = {
+//         nombre: 'cjgmj',
+//         url: req.url
+//     };
+
+//     res.send(salida);
+// });
 
 app.listen(3000, () => console.log('Escuchando el puerto 3000'));
