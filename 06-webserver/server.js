@@ -5,15 +5,14 @@ const app = express();
 
 app.use(express.static(__dirname + '/public'));
 
-// app.get('/', (req, res) => {
-//     // res.send('Hola mundo');
+// Express HBS engine
+app.set('view engine', 'hbs');
 
-//     let salida = {
-//         nombre: 'cjgmj',
-//         url: req.url
-//     };
-
-//     res.send(salida);
-// });
+app.get('/', (req, res) => {
+    res.render('home', {
+        nombre: 'cjgmj',
+        year: new Date().getFullYear()
+    });
+});
 
 app.listen(3000, () => console.log('Escuchando el puerto 3000'));
