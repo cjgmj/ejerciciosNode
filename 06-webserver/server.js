@@ -4,6 +4,7 @@ const express = require('express');
 const app = express();
 
 const hbs = require('hbs');
+require('./hbs/helpers');
 
 app.use(express.static(__dirname + '/public'));
 
@@ -13,15 +14,12 @@ app.set('view engine', 'hbs');
 
 app.get('/', (req, res) => {
     res.render('home', {
-        nombre: 'cjgmj',
-        year: new Date().getFullYear()
+        nombre: 'cjgmj'
     });
 });
 
 app.get('/about', (req, res) => {
-    res.render('about', {
-        year: new Date().getFullYear()
-    });
+    res.render('about');
 });
 
 app.listen(3000, () => console.log('Escuchando el puerto 3000'));
