@@ -25,6 +25,24 @@ let verificaToken = (req, res, next) => {
     });
 };
 
+// Verificar rol administrador
+let verificaAdminRole = (req, res, next) => {
+    let usuario = req.usuario;
+
+    // Si no se llama al next no continúa la ejecución
+    if (usuario.role === 'ADMIN_ROLE') {
+        next();
+    } else {
+        return res.json({
+            ok: false,
+            err: {
+                message: 'El usuario no es administrador'
+            }
+        });
+    }
+};
+
 module.exports = {
-    verificaToken
+    verificaToken,
+    verificaAdminRole
 };
