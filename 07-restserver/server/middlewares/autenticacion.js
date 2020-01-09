@@ -4,7 +4,11 @@ const jwt = require('jsonwebtoken');
 
 // Verificar token
 let verificaToken = (req, res, next) => {
-    let token = req.get('Authorization').split('Bearer ')[1];
+    let token = req.get('Authorization');
+
+    if (token) {
+        token = token.split('Bearer ')[1];
+    }
 
     jwt.verify(token, process.env.SEED, (err, decoded) => {
         if (err) {
