@@ -10,19 +10,22 @@ let Categoria = require('../models/categoria');
 
 // Mostrar todas las categorías
 app.get('/categoria', verificaToken, (req, res) => {
-    Categoria.find({}, (err, categorias) => {
-        if (err) {
-            return res.status(500).json({
-                ok: false,
-                err
-            });
-        }
+    Categoria.find({})
+        .sort('descripcion')
+        .populate('usuario', 'nombre email')
+        .exec((err, categorias) => {
+            if (err) {
+                return res.status(500).json({
+                    ok: false,
+                    err
+                });
+            }
 
-        res.json({
-            ok: true,
-            categorias
+            res.json({
+                ok: true,
+                categorias
+            });
         });
-    });
 });
 
 // Mostrar categoría por id
