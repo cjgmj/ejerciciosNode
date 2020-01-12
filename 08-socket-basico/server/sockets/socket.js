@@ -7,7 +7,7 @@ io.on('connection', (client) => {
 
     client.emit('enviarMensaje', {
         usuario: 'sistema',
-        mensaje: ' Bienvenido a la aplicación'
+        mensaje: 'Bienvenido a la aplicación'
     });
 
     client.on('disconnect', () => {
@@ -15,18 +15,20 @@ io.on('connection', (client) => {
     });
 
     // Escuchar el cliente
-    client.on('enviarMensaje', (mensaje, callback) => {
-        console.log(mensaje);
+    client.on('enviarMensaje', (data, callback) => {
+        console.log(data);
 
-        if (mensaje.usuario) {
-            callback({
-                resp: 'TODO SALIÓ BIEN'
-            });
-        } else {
-            callback({
-                resp: 'TODO SALIÓ MAL'
-            });
-        }
+        client.broadcast.emit('enviarMensaje', data);
+
+        // if (mensaje.usuario) {
+        //     callback({
+        //         resp: 'TODO SALIÓ BIEN'
+        //     });
+        // } else {
+        //     callback({
+        //         resp: 'TODO SALIÓ MAL'
+        //     });
+        // }
 
     });
 });
