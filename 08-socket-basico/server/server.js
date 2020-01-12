@@ -20,6 +20,10 @@ app.use(express.static(publicPath));
 // IO mantendrá una comunicación directa con el backend
 let io = socketIO(server);
 
+io.on('connection', (client) => {
+    console.log('Usuario conectado');
+});
+
 server.listen(port, (err) => {
 
     if (err) throw new Error(err);
