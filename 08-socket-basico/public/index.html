@@ -28,6 +28,9 @@
         socket.emit('enviarMensaje', {
             usuario: 'cjgmj',
             mensaje: 'Hola mundo'
+        }, function(resp) {
+            console.log('Se ejecuta el callback');
+            console.log(resp);
         });
 
         // Escuchar información
