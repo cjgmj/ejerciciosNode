@@ -24,6 +24,10 @@ class TicketControl {
         return `Ticket ${this.ultimo}`;
     }
 
+    getUltimo() {
+        return `Ticket ${this.ultimo}`;
+    }
+
     reiniciarConteo() {
         this.ultimo = 0;
 

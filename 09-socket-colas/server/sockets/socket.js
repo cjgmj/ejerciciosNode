@@ -10,4 +10,8 @@ io.on('connection', (client) => {
         let siguiente = tickerControl.siguiente();
         callback(siguiente);
     });
+
+    client.emit('estadoActual', {
+        actual: tickerControl.getUltimo()
+    });
 });
