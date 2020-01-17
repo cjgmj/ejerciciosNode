@@ -12,7 +12,8 @@ io.on('connection', (client) => {
     });
 
     client.emit('estadoActual', {
-        actual: tickerControl.getUltimo()
+        actual: tickerControl.getUltimo(),
+        ultimos4: tickerControl.getUltimos4()
     });
 
     client.on('atenderTicket', (data, callback) => {
