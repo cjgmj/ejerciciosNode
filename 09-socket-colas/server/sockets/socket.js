@@ -14,4 +14,17 @@ io.on('connection', (client) => {
     client.emit('estadoActual', {
         actual: tickerControl.getUltimo()
     });
+
+    client.on('atenderTicket', (data, callback) => {
+        if (!data.escritorio) {
+            return callback({
+                err: true,
+                mensaje: 'El escritorio es necesario'
+            });
+        }
+
+        let atenderTicket = tickerControl.atenderTicket(data.escritorio);
+
+        callback(atenderTicket);
+    });
 });
