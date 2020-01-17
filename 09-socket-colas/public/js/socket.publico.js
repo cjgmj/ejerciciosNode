@@ -18,6 +18,12 @@ socket.on('estadoActual', function(resp) {
     actualizaHTML(resp.ultimos4);
 });
 
+socket.on('ultimos4', function(resp) {
+    var audio = new Audio('audio/new-ticket.mp3');
+    audio.play();
+    actualizaHTML(resp.ultimos4);
+});
+
 function actualizaHTML(ultimos4) {
     for (var i = 0; i <= ultimos4.length - 1; i++) {
         lblTickets[i].text('Ticket ' + ultimos4[i].numero);
