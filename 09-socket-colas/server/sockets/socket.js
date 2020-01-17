@@ -1,16 +1,17 @@
-const { io } = require('../server');
+/*jshint esversion: 8 */
 
+const { io } = require('../server');
+const { TicketControl } = require('../classes/ticket-control');
+
+const tickerControl = new TicketControl();
 
 io.on('connection', (client) => {
-
     console.log('Usuario conectado');
 
     client.emit('enviarMensaje', {
-        usuario: 'Administrador',
-        mensaje: 'Bienvenido a esta aplicación'
+        usuario: 'sistema',
+        mensaje: 'Bienvenido a la aplicación'
     });
-
-
 
     client.on('disconnect', () => {
         console.log('Usuario desconectado');
@@ -18,25 +19,19 @@ io.on('connection', (client) => {
 
     // Escuchar el cliente
     client.on('enviarMensaje', (data, callback) => {
-
         console.log(data);
 
         client.broadcast.emit('enviarMensaje', data);
 
-
         // if (mensaje.usuario) {
         //     callback({
-        //         resp: 'TODO SALIO BIEN!'
+        //         resp: 'TODO SALIÓ BIEN'
         //     });
-
         // } else {
         //     callback({
-        //         resp: 'TODO SALIO MAL!!!!!!!!'
+        //         resp: 'TODO SALIÓ MAL'
         //     });
         // }
 
-
-
     });
-
 });
