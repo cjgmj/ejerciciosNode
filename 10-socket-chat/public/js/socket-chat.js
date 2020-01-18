@@ -36,7 +36,8 @@ socket.on('disconnect', function() {
 
 // Escuchar información
 socket.on('crearMensaje', function(mensaje) {
-    renderizarMensajes(mensaje);
+    renderizarMensajes(mensaje, false);
+    scrollBottom();
 });
 
 socket.on('listaPersona', function(personas) {
