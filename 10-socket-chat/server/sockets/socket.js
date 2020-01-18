@@ -18,26 +18,26 @@ io.on('connection', (client) => {
 
         client.join(usuario.sala);
 
-        let personas = usuarios.agregarPersona(client.id, usuario.nombre, usuario.sala);
+        usuarios.agregarPersona(client.id, usuario.nombre, usuario.sala);
 
-        client.broadcast.emit('crearMensaje', crearMensaje('sistema', `${usuario.nombre} se unió el chat`));
-        client.broadcast.emit('listaPersona', usuarios.getPersonas());
+        client.broadcast.to(usuario.sala).emit('crearMensaje', crearMensaje('sistema', `${usuario.nombre} se unió el chat`));
+        client.broadcast.to(usuario.sala).emit('listaPersona', usuarios.getPersonasPorSala(usuario.sala));
 
-        callback(personas);
+        callback(usuarios.getPersonasPorSala(usuario.sala));
     });
 
     client.on('crearMensaje', (data) => {
         let persona = usuarios.getPersona(client.id);
 
         let mensaje = crearMensaje(persona.nombre, data.mensaje);
-        client.broadcast.emit('crearMensaje', mensaje);
+        client.broadcast.to(persona.sala).emit('crearMensaje', mensaje);
     });
 
     client.on('disconnect', () => {
         let personaBorrada = usuarios.borrarPersona(client.id);
 
-        client.broadcast.emit('crearMensaje', crearMensaje('sistema', `${personaBorrada.nombre} abandonó el chat`));
-        client.broadcast.emit('listaPersona', usuarios.getPersonas());
+        client.broadcast.to(personaBorrada.sala).emit('crearMensaje', crearMensaje('sistema', `${personaBorrada.nombre} abandonó el chat`));
+        client.broadcast.to(personaBorrada.sala).emit('listaPersona', usuarios.getPersonasPorSala(personaBorrada.sala));
     });
 
     // Mensaje privados
