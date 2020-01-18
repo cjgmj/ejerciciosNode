@@ -25,13 +25,13 @@ socket.on('disconnect', function() {
 });
 
 // Enviar información
-socket.emit('enviarMensaje', {
-    usuario: 'cjgmj',
-    mensaje: 'Hola mundo'
-}, function(resp) {
-    console.log('Se ejecuta el callback');
-    console.log(resp);
-});
+// socket.emit('crearMensaje', {
+//     usuario: 'cjgmj',
+//     mensaje: 'Hola mundo'
+// }, function(resp) {
+//     console.log('Se ejecuta el callback');
+//     console.log(resp);
+// });
 
 // Escuchar información
 socket.on('crearMensaje', function(mensaje) {
