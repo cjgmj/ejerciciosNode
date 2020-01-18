@@ -34,6 +34,10 @@ socket.emit('enviarMensaje', {
 });
 
 // Escuchar información
-socket.on('enviarMensaje', function(mensaje) {
+socket.on('crearMensaje', function(mensaje) {
     console.log(mensaje);
+});
+
+socket.on('listaPersona', function(personas) {
+    console.log(personas);
 });
