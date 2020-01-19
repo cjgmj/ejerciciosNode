@@ -12,6 +12,9 @@ class MySQL {
         });
         this.conectarDB();
     }
+    static get instance() {
+        return this._instance || (this._instance = new this());
+    }
     conectarDB() {
         this.con.connect((err) => {
             if (err) {
