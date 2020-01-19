@@ -15,6 +15,21 @@ class MySQL {
     static get instance() {
         return this._instance || (this._instance = new this());
     }
+    static ejecutarQuery(query, callback) {
+        this.instance.con.query(query, (err, results, fields) => {
+            if (err) {
+                console.log('Error en query');
+                console.log(err);
+                return callback(err);
+            }
+            if (results.length === 0) {
+                callback('El registro solicitado no existe');
+            }
+            else {
+                callback(null, results);
+            }
+        });
+    }
     conectarDB() {
         this.con.connect((err) => {
             if (err) {
