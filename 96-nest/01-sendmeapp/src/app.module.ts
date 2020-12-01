@@ -2,8 +2,8 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { MensajesController } from './mensajes/mensajes.controller';
-import { MensajesService } from './service/mensajes/mensajes.service';
+import { MensajesController } from './mensajes/controller/mensajes.controller';
+import { MensajesService } from './mensajes/service/mensajes.service';
 import { Mensaje } from './mensajes/entity/mensaje.entity';
 
 @Module({
