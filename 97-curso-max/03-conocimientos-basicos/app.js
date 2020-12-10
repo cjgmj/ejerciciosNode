@@ -1,4 +1,5 @@
 const http = require("http");
+const fs = require("fs");
 
 // const server = http.createServer((request, response) => {
 //   //   console.log(request);
@@ -17,6 +18,7 @@ const http = require("http");
 
 const server = http.createServer((req, res) => {
   const url = req.url;
+  const method = req.method;
 
   if (url === "/") {
     res.setHeader("Content-Type", "text/html");
@@ -27,6 +29,21 @@ const server = http.createServer((req, res) => {
       "<body><form action='/message' method='POST'><input type='text' name='message'/><button type='submit'>Send</button></form></body>"
     );
     res.write("</head>");
+
+    return res.end();
+  }
+
+  if (url === "/message" && method === "POST") {
+    fs.writeFileSync("message.txt", "DUMMY");
+
+    // El código 302 es el estándar para las redirecciones
+    res.writeHead(302, {
+      Location: "/",
+    });
+
+    // Lo anterior es igual
+    // res.statusCode = 302;
+    // res.setHeader('Location', '/');
 
     return res.end();
   }
