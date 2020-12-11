@@ -41,22 +41,22 @@ const server = http.createServer((req, res) => {
       body.push(chunk);
     });
 
-    req.on("end", () => {
+    return req.on("end", () => {
       const parsedBody = Buffer.concat(body).toString(); // Esto funciona para las cadenas de texto
       const message = parsedBody.split("=")[1];
-      fs.writeFileSync("message.txt", message);
+      fs.writeFile("message.txt", message, () => {
+        // El código 302 es el estándar para las redirecciones
+        res.writeHead(302, {
+          Location: "/",
+        });
+
+        // Lo anterior es igual
+        // res.statusCode = 302;
+        // res.setHeader('Location', '/');
+
+        return res.end();
+      });
     });
-
-    // El código 302 es el estándar para las redirecciones
-    res.writeHead(302, {
-      Location: "/",
-    });
-
-    // Lo anterior es igual
-    // res.statusCode = 302;
-    // res.setHeader('Location', '/');
-
-    return res.end();
   }
 
   res.setHeader("Content-Type", "text/html");
