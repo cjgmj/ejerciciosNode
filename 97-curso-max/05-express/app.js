@@ -2,16 +2,18 @@ const express = require('express');
 
 const app = express();
 
-app.use((req, res, next) => {
-  console.log('In the middleware');
-  next(); // Permite a la petición a continuar al siguiente middleware
-  // Si no se llama a la función la petición muere sin enviar respuesta
+// El path no es el absoluto, se indica que debe comenzar por el especificado
+// Es importante el orden de los middleware porque se ejecutan de arriba hacia abajo
+app.use('/', (req, res, next) => {
+  console.log('This always runs!');
+  next();
 });
 
-app.use((req, res, next) => {
-  console.log('In another middleware');
+app.use('/add-product', (req, res, next) => {
+  res.send('<h1>The "Add Product" Page</h1>');
+});
 
-  // Si no se llama a la función debemos devolver una respuesta.
+app.use('/', (req, res, next) => {
   res.send('<h1>Hello from Express!</h1>');
 });
 
