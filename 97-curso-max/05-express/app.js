@@ -1,3 +1,5 @@
+const path = require('path');
+
 const express = require('express');
 const bodyParser = require('body-parser');
 
@@ -17,16 +19,7 @@ app.use('/admin', adminRoutes);
 app.use(shopRoutes);
 
 app.use((req, res, next) => {
-  const response = `<html>
-    <head>
-      <title>Error 404</title>
-    </head>
-  
-    <body>
-      <h1>Error 404: Page Not Found</h1>
-    </body>
-    </html>`;
-  res.status(404).send(response);
+  res.status(404).sendFile(path.join(__dirname, 'views', '404.html'));
 });
 
 // El path no es el absoluto, se indica que debe comenzar por el especificado
