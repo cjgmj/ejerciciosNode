@@ -16,6 +16,19 @@ app.use(
 app.use(adminRoutes);
 app.use(shopRoutes);
 
+app.use((req, res, next) => {
+  const response = `<html>
+    <head>
+      <title>Error 404</title>
+    </head>
+  
+    <body>
+      <h1>Error 404: Page Not Found</h1>
+    </body>
+    </html>`;
+  res.status(404).send(response);
+});
+
 // El path no es el absoluto, se indica que debe comenzar por el especificado
 // Es importante el orden de los middleware porque se ejecutan de arriba hacia abajo
 app.use('/', (req, res, next) => {
