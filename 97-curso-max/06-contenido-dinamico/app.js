@@ -5,11 +5,8 @@ const bodyParser = require('body-parser');
 
 const app = express();
 
-app.set('view engine', 'pug');
-app.set('views', 'views-pug');
-
-const adminData = require('./routes-pug/admin');
-const shopRoutes = require('./routes-pug/shop');
+const adminData = require('./routes/admin');
+const shopRoutes = require('./routes/shop');
 
 // Middleware para parsear el cuerpo de las peticiones
 app.use(
@@ -25,7 +22,7 @@ app.use('/admin', adminData.routes);
 app.use(shopRoutes);
 
 app.use((req, res, next) => {
-  res.status(404).render('404', { docTitle: 'Page Not Found' });
+  res.status(404).sendFile(path.join(__dirname, 'views', '404.html'));
 });
 
 // El path no es el absoluto, se indica que debe comenzar por el especificado
