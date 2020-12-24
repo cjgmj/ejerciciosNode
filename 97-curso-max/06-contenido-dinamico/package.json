@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon app.js",
     "start-pug": "nodemon app-pug.js",
-    "start-handlebars": "nodemon app-handlebars.js"
+    "start-handlebars": "nodemon app-handlebars.js",
+    "start-ejs": "nodemon app-ejs.js"
   },
   "author": "cjgmj",
   "license": "ISC",
