@@ -7,14 +7,16 @@ const expressHbs = require('express-handlebars');
 const app = express();
 
 // La extensión de los archivos tiene que ser el mismo nombre indicado aquí
-app.engine(
-  'hbs',
-  expressHbs({
-    extname: 'hbs',
-    defaultLayout: '',
-    layoutsDir: '',
-  })
-);
+// app.engine(
+//   'hbs',
+//   expressHbs({
+//     extname: 'hbs',
+//     defaultLayout: 'main',
+//     layoutsDir: 'views-handlebars/layouts',
+//   })
+// );
+
+app.engine('hbs', expressHbs({ extname: 'hbs' }));
 app.set('view engine', 'hbs');
 app.set('views', 'views-handlebars');
 
