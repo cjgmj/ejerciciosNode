@@ -35,7 +35,7 @@ module.exports = class Cart {
         cart.products = [...cart.products, updatedProduct];
       }
 
-      cart.totalPrice += productPrice;
+      cart.totalPrice += parseInt(productPrice);
 
       fs.writeFile(file, JSON.stringify(cart), (err) => {
         if (err) {
