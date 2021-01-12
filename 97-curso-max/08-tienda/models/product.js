@@ -12,7 +12,11 @@ const getProductsFromFile = (cb) => {
     if (err) {
       cb([]);
     } else {
-      cb(JSON.parse(fileContent));
+      if (fileContent != '') {
+        cb(JSON.parse(fileContent));
+      } else {
+        cb([]);
+      }
     }
   });
 };
