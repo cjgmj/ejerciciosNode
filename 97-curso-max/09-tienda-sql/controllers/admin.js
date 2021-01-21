@@ -19,7 +19,9 @@ exports.postAddProduct = (req, res, next) => {
     price,
     description,
   })
-    .then((result) => console.log(result))
+    .then((result) => {
+      console.log(result);
+    })
     .catch((err) => console.log(err));
 };
 
