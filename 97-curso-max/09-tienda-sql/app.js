@@ -7,6 +7,8 @@ const errorController = require('./controllers/error');
 const sequelize = require('./util/database');
 const Product = require('./models/product');
 const User = require('./models/user');
+const Cart = require('./models/cart');
+const CartItem = require('./models/cart-item');
 
 const app = express();
 
@@ -48,8 +50,17 @@ app.use('/', (req, res, next) => {
   next();
 });
 
+// Relación creación de producto con usuario
 Product.belongsTo(User, { constraints: true, onDelete: 'CASCADE' });
 User.hasMany(Product);
+
+// Relación del carrito con usuario
+User.hasOne(Cart);
+Cart.belongsTo(User);
+
+// Relación del carrito con productos
+Cart.belongsToMany(Product, { through: CartItem });
+Product.belongsToMany(Cart, { through: CartItem });
 
 sequelize
   // .sync(
