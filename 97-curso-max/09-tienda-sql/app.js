@@ -26,6 +26,16 @@ app.use(
 // Cada vez que se busque un archivo css, js o imágenes se sitúa en la carpeta public
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Lo hace para las peticiones no al arrancar el servidor
+app.use((req, res, next) => {
+  User.findByPk(1)
+    .then((user) => {
+      req.user = user;
+      next();
+    })
+    .catch((err) => console.log(err));
+});
+
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
 
@@ -42,12 +52,25 @@ Product.belongsTo(User, { constraints: true, onDelete: 'CASCADE' });
 User.hasMany(Product);
 
 sequelize
-  .sync(
-    // Sobrescribe las tablas
-    { force: true }
-  )
+  // .sync(
+  //   // Sobrescribe las tablas
+  //   { force: true }
+  // )
+  .sync()
   .then((result) => {
+    return User.findByPk(1);
     // console.log(result);
+  })
+  .then((user) => {
+    if (!user) {
+      return User.create({ name: 'John', email: 'jdoe@test.com' });
+    }
+
+    return Promise.resolve(user);
+  })
+  .then((user) => {
+    // console.log(user);
+
     app.listen(3000);
   })
   .catch((err) => console.log(err));
