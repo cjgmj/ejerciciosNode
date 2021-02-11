@@ -25,7 +25,9 @@ app.use(
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Lo hace para las peticiones no al arrancar el servidor
-app.use((req, res, next) => {});
+app.use((req, res, next) => {
+  next();
+});
 
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
