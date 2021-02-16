@@ -16,6 +16,22 @@ class Product {
       .then((result) => console.log(result))
       .catch((err) => console.log(err));
   }
+
+  static fetchAll() {
+    const db = getDb();
+    return (
+      db
+        .collection('products')
+        .find()
+        // Es necesario llamar este método para que te devuelva los documentos,
+        .toArray()
+        .then((result) => {
+          console.log(result);
+          return result;
+        })
+        .catch((err) => console.log(err))
+    );
+  }
 }
 
 module.exports = Product;
