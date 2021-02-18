@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 
 const errorController = require('./controllers/error');
 const mongoConnect = require('./util/database').mongoConnect;
+const User = require('./models/user');
 
 const app = express();
 
@@ -23,6 +24,17 @@ app.use(
 
 // Cada vez que se busque un archivo css, js o imágenes se sitúa en la carpeta public
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use((req, res, next) => {
+  User.findById('602e7aaaec6f85cf280382f0')
+    .then((user) => {
+      req.user = user;
+      next();
+    })
+    .catch((err) => console.log(err));
+
+  next();
+});
 
 // Lo hace para las peticiones no al arrancar el servidor
 app.use((req, res, next) => {
