@@ -1,13 +1,16 @@
 extends ../layouts/main-layout.pug
 
+block styles
+    link(rel="stylesheet", href="/css/orders.css")
+
 block content
     if orders.length > 0
-        ul
+        ul.orders
             each o in orders
-                li
-                    h1 # #{o.id}
-                    ul
-                        each product in o.products
-                            li #{product.title} (#{product.orderItem.quantity})
+                li.orders__item
+                    h1 Order - # #{o._id}
+                    ul.orders__products
+                        each product in o.items
+                            li.orders__products-item #{product.title} (#{product.quantity})
     else
         h1 Nothing there!
