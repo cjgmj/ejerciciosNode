@@ -26,14 +26,14 @@ app.use(
 // Cada vez que se busque un archivo css, js o imágenes se sitúa en la carpeta public
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use((req, res, next) => {
-  User.findById('602e7aaaec6f85cf280382f0')
-    .then((user) => {
-      req.user = new User(user.name, user.email, user.cart, user._id);
-      next();
-    })
-    .catch((err) => console.log(err));
-});
+// app.use((req, res, next) => {
+// User.findById('602e7aaaec6f85cf280382f0')
+//   .then((user) => {
+//     req.user = new User(user.name, user.email, user.cart, user._id);
+//     next();
+//   })
+//   .catch((err) => console.log(err));
+// });
 
 // Lo hace para las peticiones no al arrancar el servidor
 app.use((req, res, next) => {
