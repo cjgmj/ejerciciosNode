@@ -26,14 +26,14 @@ app.use(
 // Cada vez que se busque un archivo css, js o imágenes se sitúa en la carpeta public
 app.use(express.static(path.join(__dirname, 'public')));
 
-// app.use((req, res, next) => {
-// User.findById('602e7aaaec6f85cf280382f0')
-//   .then((user) => {
-//     req.user = new User(user.name, user.email, user.cart, user._id);
-//     next();
-//   })
-//   .catch((err) => console.log(err));
-// });
+app.use((req, res, next) => {
+  User.findById('603e47230cb9392c3875169c')
+    .then((user) => {
+      req.user = user;
+      next();
+    })
+    .catch((err) => console.log(err));
+});
 
 // Lo hace para las peticiones no al arrancar el servidor
 app.use((req, res, next) => {
@@ -57,6 +57,17 @@ mongoose
     'mongodb+srv://node:dqoOedTlawu9fJI4@cluster0.a2uzr.mongodb.net/shop?retryWrites=true&w=majority'
   )
   .then(() => {
+    User.findOne().then((user) => {
+      if (!user) {
+        const user = new User({
+          name: 'cjgmj',
+          email: 'cjgmj@test.com',
+          cart: { items: [] },
+        });
+        user.save();
+      }
+    });
+
     app.listen(3000);
   })
   .catch((err) => console.log(err));

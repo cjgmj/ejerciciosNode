@@ -1,26 +1,27 @@
-const mongodb = require('mongodb');
+const mongoose = require('mongoose');
 
-class User {
-  constructor(username, email, cart, id) {
-    this.name = username;
-    this.email = email;
-    this.cart = cart;
-    this._id = id;
-  }
+const Schema = mongoose.Schema;
 
-  save() {}
+const userSchema = new Schema({
+  name: {
+    type: String,
+    required: true,
+  },
+  email: {
+    type: String,
+    required: true,
+  },
+  cart: {
+    items: [
+      {
+        productId: {
+          type: Schema.Types.ObjectId,
+          required: true,
+        },
+        quantity: { type: Number, required: true },
+      },
+    ],
+  },
+});
 
-  addToCart(product) {}
-
-  getCart() {}
-
-  deleteItemFromCart(productId) {}
-
-  addOrder() {}
-
-  getOrders() {}
-
-  static findById(userId) {}
-}
-
-module.exports = User;
+module.exports = mongoose.model('User', userSchema);
