@@ -10,7 +10,7 @@ block content
                 li.orders__item
                     h1 Order - # #{o._id}
                     ul.orders__products
-                        each product in o.items
-                            li.orders__products-item #{product.title} (#{product.quantity})
+                        each p in o.products
+                            li.orders__products-item #{p.product.title} (#{p.quantity})
     else
         h1 Nothing there!
