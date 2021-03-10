@@ -5,6 +5,8 @@ const bodyParser = require('body-parser');
 
 const mongoose = require('mongoose');
 
+const session = require('express-session');
+
 const errorController = require('./controllers/error');
 const User = require('./models/user');
 
@@ -26,6 +28,14 @@ app.use(
 
 // Cada vez que se busque un archivo css, js o imágenes se sitúa en la carpeta public
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(
+  session({
+    secret: 'my secret',
+    resave: false,
+    saveUninitialized: false,
+  })
+);
 
 app.use((req, res, next) => {
   User.findById('603e47230cb9392c3875169c')
