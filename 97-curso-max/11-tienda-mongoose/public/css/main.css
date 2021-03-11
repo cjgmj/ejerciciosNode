@@ -66,6 +66,16 @@ form {
   color: white;
 }
 
+.main-header__item button {
+  background: none;
+  color: white;
+  border: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
+}
+
 .main-header__item a:hover,
 .main-header__item a:active,
 .main-header__item a.active,
