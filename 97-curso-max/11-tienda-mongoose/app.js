@@ -47,15 +47,6 @@ app.use(
   })
 );
 
-app.use((req, res, next) => {
-  User.findById('603e47230cb9392c3875169c')
-    .then((user) => {
-      req.user = user;
-      next();
-    })
-    .catch((err) => console.log(err));
-});
-
 // Lo hace para las peticiones no al arrancar el servidor
 app.use((req, res, next) => {
   next();
