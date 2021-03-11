@@ -122,9 +122,21 @@ form {
   padding: 0.5rem 2rem;
 }
 
+.mobile-nav__item button {
+  background: none;
+  color: white;
+  border: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
+}
+
 .mobile-nav__item a:active,
 .mobile-nav__item a:hover,
-.mobile-nav__item a.active {
+.mobile-nav__item a.active,
+.mobile-nav__item button:hover,
+.mobile-nav__item button:active {
   background: #00695c;
   color: white;
   border-radius: 3px;

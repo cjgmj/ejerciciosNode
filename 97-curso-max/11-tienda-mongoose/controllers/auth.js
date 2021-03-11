@@ -21,7 +21,10 @@ exports.postLogin = (req, res, next) => {
       req.session.isLoggedIn = true;
       req.session.user = user;
 
-      res.redirect('/');
+      // Aseguramos que la sesión esté guardada antes de la redirección
+      req.session.save(() => {
+        res.redirect('/');
+      });
     })
     .catch((err) => console.log(err));
 };
