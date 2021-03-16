@@ -26,15 +26,35 @@ exports.getSignup = (req, res, next) => {
 exports.postLogin = (req, res, next) => {
   // res.setHeader('Set-Cookie', 'loggedIn=true; HttpOnly');
 
-  User.findById('603e47230cb9392c3875169c')
-    .then((user) => {
-      req.session.isLoggedIn = true;
-      req.session.user = user;
+  const email = req.body.email;
+  const password = req.body.password;
 
-      // Aseguramos que la sesión esté guardada antes de la redirección
-      req.session.save(() => {
-        res.redirect('/');
-      });
+  User.findOne({ email })
+    .then((user) => {
+      if (!user) {
+        return res.redirect('/login');
+      }
+
+      // Primer argumento texto plano, segundo argumento texto hasheado
+      bcrypt
+        .compare(password, user.password)
+        .then((doMatch) => {
+          if (doMatch) {
+            req.session.isLoggedIn = true;
+            req.session.user = user;
+
+            // Aseguramos que la sesión esté guardada antes de la redirección
+            return req.session.save(() => {
+              res.redirect('/');
+            });
+          }
+
+          res.redirect('/login');
+        })
+        .catch((err) => {
+          console.log(err);
+          res.redirect('/login');
+        });
     })
     .catch((err) => console.log(err));
 };
