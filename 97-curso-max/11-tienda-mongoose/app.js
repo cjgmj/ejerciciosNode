@@ -80,18 +80,5 @@ app.use('/', (req, res, next) => {
 
 mongoose
   .connect(MONGOBD_URI)
-  .then(() => {
-    User.findOne().then((user) => {
-      if (!user) {
-        const user = new User({
-          name: 'cjgmj',
-          email: 'cjgmj@test.com',
-          cart: { items: [] },
-        });
-        user.save();
-      }
-    });
-
-    app.listen(3000);
-  })
+  .then(() => app.listen(3000))
   .catch((err) => console.log(err));
