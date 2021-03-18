@@ -5,8 +5,8 @@ block styles
     link(rel="stylesheet", href="/css/auth.css")
 
 block content 
-    if errorMessage
-        div #{errorMessage}
+    each message in errorMessage
+        div.user-message.user-message--error #{message}
     form.login-form(action="/login", method="post")
         div.form-control
             label(for="email") E-Mail
