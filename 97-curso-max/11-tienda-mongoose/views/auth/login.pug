@@ -8,8 +8,9 @@ block content
     form.login-form(action="/login", method="post")
         div.form-control
             label(for="email") E-Mail
-            input#title(type="ema8il", name="email")
+            input#title(type="email", name="email")
         div.form-control
             label(for="password") Password
             input#imageUrl(type="password", name="password")
+        input(type="hidden", name="_csrf", value=csrfToken)
         button.btn(type="submit") Login
