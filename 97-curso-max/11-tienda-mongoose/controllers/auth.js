@@ -5,13 +5,13 @@ const User = require('../models/user');
 exports.getLogin = (req, res, next) => {
   // const isLoggedIn = req.get('Cookie').split('=')[1] == 'true';
 
-  console.log(req.session.isLoggedIn);
+  // console.log(req.session.isLoggedIn);
 
   // Esta ruta se tiene que corresponder con el fichero pug
   res.render('auth/login', {
     path: '/login',
     pageTitle: 'Login',
-    isAuthenticated: false,
+    errorMessage: req.flash('error'),
   });
 };
 
@@ -19,7 +19,6 @@ exports.getSignup = (req, res, next) => {
   res.render('auth/signup', {
     path: '/signup',
     pageTitle: 'Signup',
-    isAuthenticated: false,
   });
 };
 
@@ -32,6 +31,7 @@ exports.postLogin = (req, res, next) => {
   User.findOne({ email })
     .then((user) => {
       if (!user) {
+        req.flash('error', 'Invalid email or password.');
         return res.redirect('/login');
       }
 
