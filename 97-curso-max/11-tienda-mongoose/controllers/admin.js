@@ -83,7 +83,7 @@ exports.postEditProduct = (req, res, next) => {
 };
 
 exports.getProducts = (req, res, next) => {
-  Product.find()
+  Product.find({ userId: req.user._id })
     // .select('title price -_id') // Indica los campos que devolverá la base de datos, para excluir campos se usa - (siempre se devuelve el _id)
     // .populate('userId', 'name') // Obtiene el objeto relacionado, el siguiente campo indican los que serán devueltos
     .then((products) => {
