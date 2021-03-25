@@ -13,7 +13,18 @@ router.post('/login', authController.postLogin);
 
 router.post(
   '/signup',
-  check('email').isEmail().withMessage('Please enter a valid email.'),
+  check('email')
+    .isEmail()
+    .withMessage('Please enter a valid email.')
+    // Validador personalizado
+    .custom((value, { req }) => {
+      if (value === 'test@test.com') {
+        throw new Error('This email address is forbidden.');
+      }
+
+      // Si se valida con éxito se tiene que devolver true
+      return true;
+    }),
   authController.postSignup
 );
 
