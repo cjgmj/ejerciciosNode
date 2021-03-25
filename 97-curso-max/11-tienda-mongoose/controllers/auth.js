@@ -3,6 +3,9 @@ const crypto = require('crypto');
 const bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
 
+// validationResult devuelve todos los errores de validación
+const { validationResult } = require('express-validator/check');
+
 const User = require('../models/user');
 
 const transporter = nodemailer.createTransport({
@@ -77,6 +80,17 @@ exports.postSignup = (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
   const confirmPassword = req.body.confirmPassword;
+
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    // 422 es el código usado para indicar que falló la validación
+    return res.status(422).render('auth/signup', {
+      path: '/signup',
+      pageTitle: 'Signup',
+      errorMessage: errors.array().map((e) => e.msg),
+    });
+  }
 
   User.findOne({ email })
     .then((userDoc) => {
