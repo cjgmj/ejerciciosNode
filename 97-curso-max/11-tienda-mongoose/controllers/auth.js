@@ -79,7 +79,6 @@ exports.postLogin = (req, res, next) => {
 exports.postSignup = (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
-  const confirmPassword = req.body.confirmPassword;
 
   const errors = validationResult(req);
 
@@ -92,37 +91,25 @@ exports.postSignup = (req, res, next) => {
     });
   }
 
-  User.findOne({ email })
-    .then((userDoc) => {
-      if (userDoc) {
-        req.flash(
-          'error',
-          'E-Mail exists alrady, please pick a different one.'
-        );
-        return res.redirect('/signup');
-      }
+  bcrypt
+    .hash(password, 12)
+    .then((hashedPassword) => {
+      const user = new User({
+        email,
+        password: hashedPassword,
+        cart: { items: [] },
+      });
 
-      return bcrypt
-        .hash(password, 12)
-        .then((hashedPassword) => {
-          const user = new User({
-            email,
-            password: hashedPassword,
-            cart: { items: [] },
-          });
-
-          return user.save();
-        })
-        .then(() => {
-          res.redirect('/login');
-          return transporter.sendMail({
-            to: email,
-            from: 'info@shop.com',
-            subject: 'Signup succeeded!',
-            html: '<h1>You successfully signed up!</h1>',
-          });
-        })
-        .catch((err) => console.log(err));
+      return user.save();
+    })
+    .then(() => {
+      res.redirect('/login');
+      return transporter.sendMail({
+        to: email,
+        from: 'info@shop.com',
+        subject: 'Signup succeeded!',
+        html: '<h1>You successfully signed up!</h1>',
+      });
     })
     .catch((err) => console.log(err));
 };
