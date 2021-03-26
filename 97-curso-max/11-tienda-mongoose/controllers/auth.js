@@ -26,6 +26,8 @@ exports.getLogin = (req, res, next) => {
     path: '/login',
     pageTitle: 'Login',
     errorMessage: req.flash('error'),
+    oldInput: { email: '', password: '' },
+    validationErrors: [],
   });
 };
 
@@ -47,19 +49,29 @@ exports.postLogin = (req, res, next) => {
 
   const errors = validationResult(req);
 
-  if (errors.isEmpty()) {
+  if (!errors.isEmpty()) {
     return res.status(422).render('auth/login', {
       path: '/login',
       pageTitle: 'Login',
       errorMessage: errors.array().map((e) => e.msg),
+      oldInput: { email, password },
+      validationErrors: errors.array().map((e) => e.param),
     });
   }
 
   User.findOne({ email })
     .then((user) => {
       if (!user) {
-        req.flash('error', 'Invalid email or password.');
-        return res.redirect('/login');
+        // req.flash('error', 'Invalid email or password.');
+        // return res.redirect('/login');
+
+        return res.status(422).render('auth/login', {
+          path: '/login',
+          pageTitle: 'Login',
+          errorMessage: ['Invalid email or password.'],
+          oldInput: { email, password },
+          validationErrors: [],
+        });
       }
 
       // Primer argumento texto plano, segundo argumento texto hasheado
@@ -80,9 +92,17 @@ exports.postLogin = (req, res, next) => {
           res.redirect('/login');
         })
         .catch((err) => {
-          console.log(err);
-          req.flash('error', 'Invalid email or password.');
-          res.redirect('/login');
+          // console.log(err);
+          // req.flash('error', 'Invalid email or password.');
+          // res.redirect('/login');
+
+          return res.status(422).render('auth/login', {
+            path: '/login',
+            pageTitle: 'Login',
+            errorMessage: ['Invalid email or password.'],
+            oldInput: { email, password },
+            validationErrors: [],
+          });
         });
     })
     .catch((err) => console.log(err));
