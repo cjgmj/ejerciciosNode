@@ -5,19 +5,21 @@ block styles
     link(rel="stylesheet", href="/css/product.css")
 
 block content 
+    each message in errorMessage
+        div.user-message.user-message--error #{message}
     form.product-form(action=editing ? "/admin/edit-product" : "/admin/add-product", method="post")
         div.form-control
             label(for="title") Title
-            input#title(type="text", name="title", value=editing ? product.title : "")
+            input#title(type="text", name="title", value=editing || hasError ? product.title : "", class=validationErrors.find(e => e === 'title') ? 'invalid' : '')
         div.form-control
             label(for="imageUrl") Image URL
-            input#imageUrl(type="text", name="imageUrl", value=editing ? product.imageUrl : "")
+            input#imageUrl(type="text", name="imageUrl", value=editing || hasError ? product.imageUrl : "", class=validationErrors.find(e => e === 'imageUrl') ? 'invalid' : '')
         div.form-control
             label(for="price") Price
-            input#price(type="number", name="price", step="0.01", value=editing ? product.price : "")
+            input#price(type="number", name="price", step="0.01", value=editing || hasError ? product.price : "", class=validationErrors.find(e => e === 'price') ? 'invalid' : '')
         div.form-control
             label(for="description") Description
-            textarea#description(name="description", rows="5") #{ editing ? product.description : "" }
+            textarea#description(name="description", rows="5", class=validationErrors.find(e => e === 'description') ? 'invalid' : '') #{ editing || hasError ? product.description : "" }
         if editing
             input(type="hidden", name="productId", value=product._id)
         input(type="hidden", name="_csrf", value=csrfToken)
