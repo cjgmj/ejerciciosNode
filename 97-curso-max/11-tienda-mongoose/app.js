@@ -95,6 +95,11 @@ app.use(authRoutes);
 app.use('/500', errorController.get500);
 app.use(errorController.get404);
 
+app.use((error, req, res, next) => {
+  // res.status(error.httpStatusCode).render(...);
+  res.redirect('/500');
+});
+
 // El path no es el absoluto, se indica que debe comenzar por el especificado
 // Es importante el orden de los middleware porque se ejecutan de arriba hacia abajo
 app.use('/', (req, res, next) => {
