@@ -44,6 +44,13 @@ app.use(
 // Cada vez que se busque un archivo css, js o imágenes se sitúa en la carpeta public
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use((req, res, next) => {
+  res.locals.isAuthenticated = req.session.isLoggedIn;
+  res.locals.csrfToken = req.csrfToken();
+
+  next();
+});
+
 app.use(
   session({
     secret: 'my secret',
@@ -71,22 +78,13 @@ app.use((req, res, next) => {
       req.user = user;
       next();
     })
-    .catch((err) => {
-      throw new Error(err);
-    });
+    .catch((err) => next(new Error(err)));
 });
 
 // Lo hace para las peticiones no al arrancar el servidor
 // app.use((req, res, next) => {
 //   next();
 // });
-
-app.use((req, res, next) => {
-  res.locals.isAuthenticated = req.session.isLoggedIn;
-  res.locals.csrfToken = req.csrfToken();
-
-  next();
-});
 
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
@@ -97,7 +95,11 @@ app.use(errorController.get404);
 
 app.use((error, req, res, next) => {
   // res.status(error.httpStatusCode).render(...);
-  res.redirect('/500');
+  // res.redirect('/500');
+
+  res.status(500).render('500', {
+    pageTitle: 'Error!',
+  });
 });
 
 // El path no es el absoluto, se indica que debe comenzar por el especificado
