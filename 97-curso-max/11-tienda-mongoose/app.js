@@ -92,6 +92,7 @@ app.use('/admin', adminRoutes);
 app.use(shopRoutes);
 app.use(authRoutes);
 
+app.use('/500', errorController.get500);
 app.use(errorController.get404);
 
 // El path no es el absoluto, se indica que debe comenzar por el especificado
