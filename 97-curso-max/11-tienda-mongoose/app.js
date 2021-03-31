@@ -44,13 +44,6 @@ app.use(
 // Cada vez que se busque un archivo css, js o imágenes se sitúa en la carpeta public
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use((req, res, next) => {
-  res.locals.isAuthenticated = req.session.isLoggedIn;
-  res.locals.csrfToken = req.csrfToken();
-
-  next();
-});
-
 app.use(
   session({
     secret: 'my secret',
@@ -61,6 +54,13 @@ app.use(
 );
 
 app.use(csrfProtection);
+
+app.use((req, res, next) => {
+  res.locals.isAuthenticated = req.session.isLoggedIn;
+  res.locals.csrfToken = req.csrfToken();
+
+  next();
+});
 
 app.use(flash());
 
