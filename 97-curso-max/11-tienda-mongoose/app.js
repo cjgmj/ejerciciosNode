@@ -31,9 +31,16 @@ const csrfProtection = csrf();
 
 const fileStorage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, 'images'),
-  filename: (req, file, cb) =>
-    cb(null, `${new Date().toISOString()}-${file.originalname}`),
+  filename: (req, file, cb) => cb(null, file.originalname),
 });
+
+const fileFilter = (req, file, cb) =>
+  cb(
+    null,
+    file.mimetype === 'image/png' ||
+      file.mimetype === 'image/jpg' ||
+      file.mimetype === 'image/jpeg'
+  );
 
 app.set('view engine', 'pug');
 app.set('views', 'views');
@@ -44,7 +51,9 @@ const authRoutes = require('./routes/auth');
 
 // Middleware para parsear el cuerpo de las peticiones
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(multer({ storage: fileStorage }).single('image'));
+app.use(
+  multer({ storage: fileStorage, fileFilter: fileFilter }).single('image')
+);
 
 // Cada vez que se busque un archivo css, js o imágenes se sitúa en la carpeta public
 app.use(express.static(path.join(__dirname, 'public')));
