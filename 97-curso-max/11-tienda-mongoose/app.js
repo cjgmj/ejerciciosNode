@@ -1,7 +1,9 @@
 const path = require('path');
 
 const express = require('express');
+
 const bodyParser = require('body-parser');
+const multer = require('multer');
 
 const mongoose = require('mongoose');
 
@@ -35,11 +37,8 @@ const shopRoutes = require('./routes/shop');
 const authRoutes = require('./routes/auth');
 
 // Middleware para parsear el cuerpo de las peticiones
-app.use(
-  bodyParser.urlencoded({
-    extended: false,
-  })
-);
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(multer({ dest: 'images' }).single('image'));
 
 // Cada vez que se busque un archivo css, js o imágenes se sitúa en la carpeta public
 app.use(express.static(path.join(__dirname, 'public')));

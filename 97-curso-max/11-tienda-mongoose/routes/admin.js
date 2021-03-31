@@ -25,7 +25,7 @@ router.post(
       .isAlphanumeric()
       .isLength({ min: 3 })
       .trim(),
-    body('imageUrl', 'Image URL has to be valid.').isURL(),
+    // body('imageUrl', 'Image URL has to be valid.').isURL(),
     body('price', 'Price has to be valid.').isFloat(),
     body('description', 'Description has to be valid.')
       .isLength({ min: 5, max: 400 })
