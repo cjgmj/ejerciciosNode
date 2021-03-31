@@ -29,6 +29,12 @@ const store = new MongoDBStore({
 
 const csrfProtection = csrf();
 
+const fileStorage = multer.diskStorage({
+  destination: (req, file, cb) => cb(null, 'images'),
+  filename: (req, file, cb) =>
+    cb(null, `${new Date().toISOString()}-${file.originalname}`),
+});
+
 app.set('view engine', 'pug');
 app.set('views', 'views');
 
@@ -38,7 +44,7 @@ const authRoutes = require('./routes/auth');
 
 // Middleware para parsear el cuerpo de las peticiones
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(multer({ dest: 'images' }).single('image'));
+app.use(multer({ storage: fileStorage }).single('image'));
 
 // Cada vez que se busque un archivo css, js o imágenes se sitúa en la carpeta public
 app.use(express.static(path.join(__dirname, 'public')));
