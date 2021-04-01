@@ -57,6 +57,7 @@ app.use(
 
 // Cada vez que se busque un archivo css, js o imágenes se sitúa en la carpeta public
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/images', express.static(path.join(__dirname, 'images')));
 
 app.use(
   session({
