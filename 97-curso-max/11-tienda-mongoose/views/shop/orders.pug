@@ -8,9 +8,10 @@ block content
         ul.orders
             each o in orders
                 li.orders__item
-                    h1 Order - # #{o._id}
+                    h1 Order - ##{o._id}
                     ul.orders__products
                         each p in o.products
                             li.orders__products-item #{p.product.title} (#{p.quantity})
+                            a(href=`/orders/${o._id}`) Invoice
     else
         h1 Nothing there!

@@ -112,6 +112,8 @@ app.use((error, req, res, next) => {
   // res.status(error.httpStatusCode).render(...);
   // res.redirect('/500');
 
+  console.log(error);
+
   res.status(500).render('500', {
     pageTitle: 'Error!',
   });
