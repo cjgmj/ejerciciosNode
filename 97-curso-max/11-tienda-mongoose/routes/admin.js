@@ -22,7 +22,7 @@ router.post(
   isAuth,
   [
     body('title', 'Title has to be valid.')
-      .isAlphanumeric()
+      .isString()
       .isLength({ min: 3 })
       .trim(),
     // body('imageUrl', 'Image URL has to be valid.').isURL(),
