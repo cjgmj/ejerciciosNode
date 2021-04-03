@@ -3,6 +3,8 @@ const fileHelper = require('../util/file');
 const { validationResult } = require('express-validator/check');
 const Product = require('../models/product');
 
+const ITEMS_PER_PAGE = 1;
+
 exports.getAddProduct = (req, res, next) => {
   // if (!req.session.isLoggedIn) {
   //   return res.redirect('/login');
@@ -179,17 +181,42 @@ exports.postEditProduct = (req, res, next) => {
 };
 
 exports.getProducts = (req, res, next) => {
-  Product.find({ userId: req.user._id })
-    // .select('title price -_id') // Indica los campos que devolverá la base de datos, para excluir campos se usa - (siempre se devuelve el _id)
-    // .populate('userId', 'name') // Obtiene el objeto relacionado, el siguiente campo indican los que serán devueltos
+  const page = +req.query.page || 1;
+  let totalItems;
+
+  Product.find()
+    .countDocuments()
+    .then((numProducts) => {
+      totalItems = numProducts;
+
+      return Product.find()
+        .skip((page - 1) * ITEMS_PER_PAGE)
+        .limit(ITEMS_PER_PAGE);
+    })
     .then((products) => {
-      // console.log(products);
       res.render('admin/product-list', {
         prods: products,
         pageTitle: 'Admin Products',
         path: '/admin/products',
+        currentPage: page,
+        hasNextPage: ITEMS_PER_PAGE * page < totalItems,
+        hasPreviousPage: page > 1,
+        nextPage: page + 1,
+        previousPage: page - 1,
+        lastPage: Math.ceil(totalItems / ITEMS_PER_PAGE),
       });
     })
+    // Product.find({ userId: req.user._id })
+    //   // .select('title price -_id') // Indica los campos que devolverá la base de datos, para excluir campos se usa - (siempre se devuelve el _id)
+    //   // .populate('userId', 'name') // Obtiene el objeto relacionado, el siguiente campo indican los que serán devueltos
+    //   .then((products) => {
+    //     // console.log(products);
+    //     res.render('admin/product-list', {
+    //       prods: products,
+    //       pageTitle: 'Admin Products',
+    //       path: '/admin/products',
+    //     });
+    //   })
     .catch((err) => {
       const error = new Error(err);
       error.httpStatusCode = 500;

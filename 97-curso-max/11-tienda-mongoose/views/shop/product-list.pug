@@ -19,5 +19,6 @@ block content
                         a.btn(href="/products/" + product._id) Details
                         if isAuthenticated
                             include ../layouts/add-to-cart.pug
+        include ../layouts/pagination.pug
     else
         h1 No Products
