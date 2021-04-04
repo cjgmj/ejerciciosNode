@@ -12,3 +12,14 @@ block content
                     h2 Quantity: #{p.quantity}
         div.centered
             h2 Total: #{totalSum}
+        div.centered
+            button#order-btn.btn ORDER
+            script(src="https://js.stripe.com/v3/")
+            //- Para añadir js directamente dentro de pug hay que añadir un . a la etiqueta script
+            script(type='text/javascript').
+                const stripe = Stripe('');
+                const orderBtn = document.getElementById('order-btn');
+
+                console.log("#{sessionId}");
+
+                orderBtn.addEventListener('click', () => stripe.redirectToCheckout({ sessionId: "#{sessionId}" }));
