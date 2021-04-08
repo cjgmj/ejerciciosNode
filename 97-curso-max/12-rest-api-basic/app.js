@@ -1,3 +1,5 @@
+const path = require('path');
+
 const express = require('express');
 const mongoose = require('mongoose');
 
@@ -6,6 +8,7 @@ const feedRoutes = require('./routes/feed');
 const app = express();
 
 app.use(express.json());
+app.use('/images', express.static(path.join(__dirname, 'images')));
 
 app.use((req, res, next) => {
   // Para añadir varios dominios se deben separar por comas
@@ -21,6 +24,15 @@ app.use((req, res, next) => {
 });
 
 app.use('/feed', feedRoutes);
+
+app.use((error, req, res, next) => {
+  console.log(error);
+
+  const status = error.statusCode || 500;
+  const message = error.message;
+
+  res.status(status).json({ message });
+});
 
 mongoose
   .connect(
