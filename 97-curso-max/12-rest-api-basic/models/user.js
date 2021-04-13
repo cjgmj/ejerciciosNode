@@ -16,7 +16,7 @@ const userSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    required: true,
+    default: 'I am new!',
   },
   posts: [
     {
@@ -26,4 +26,4 @@ const userSchema = new mongoose.Schema({
   ],
 });
 
-mmodule.exporst = mongoose.mopdel('User', userSchema);
+module.exports = mongoose.model('User', userSchema);

@@ -7,7 +7,7 @@ const authController = require('../controllers/auth');
 const router = express.Router();
 
 router.put(
-  '/singup',
+  '/signup',
   [
     body('email')
       .isEmail()
