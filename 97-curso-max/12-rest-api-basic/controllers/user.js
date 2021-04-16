@@ -2,27 +2,27 @@ const User = require('../models/user');
 
 const { validationResult } = require('express-validator');
 
-exports.getStatus = (req, res, next) => {
-  User.findById(req.userId)
-    .then((user) => {
-      if (!user) {
-        const error = new Error('User not found.');
-        error.statusCode = 404;
-        throw error;
-      }
+exports.getStatus = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.userId);
 
-      res.status(200).json({ status: user.status });
-    })
-    .catch((err) => {
-      if (!err.statusCode) {
-        err.statusCode = 500;
-      }
+    if (!user) {
+      const error = new Error('User not found.');
+      error.statusCode = 404;
+      throw error;
+    }
 
-      next(err);
-    });
+    res.status(200).json({ status: user.status });
+  } catch (err) {
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+
+    next(err);
+  }
 };
 
-exports.updateUserStatus = (req, res, next) => {
+exports.updateUserStatus = async (req, res, next) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
@@ -33,26 +33,25 @@ exports.updateUserStatus = (req, res, next) => {
 
   const newStatus = req.body.status;
 
-  User.findById(req.userId)
-    .then((user) => {
-      if (!user) {
-        const error = new Error('User not found.');
-        error.statusCode = 404;
-        throw error;
-      }
+  try {
+    const user = await User.findById(req.userId);
 
-      user.status = newStatus;
+    if (!user) {
+      const error = new Error('User not found.');
+      error.statusCode = 404;
+      throw error;
+    }
 
-      return user.save();
-    })
-    .then(() => {
-      res.status(200).json({ message: 'User updated.' });
-    })
-    .catch((err) => {
-      if (!err.statusCode) {
-        err.statusCode = 500;
-      }
+    user.status = newStatus;
 
-      next(err);
-    });
+    await user.save();
+
+    res.status(200).json({ message: 'User updated.' });
+  } catch (err) {
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+
+    next(err);
+  }
 };
