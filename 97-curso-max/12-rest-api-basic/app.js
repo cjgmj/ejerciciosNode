@@ -70,7 +70,7 @@ mongoose
   .then(() => {
     const server = app.listen(8080);
 
-    const io = require('socket.io')(server, {
+    const io = require('./socket').init(server, {
       cors: {
         origin: 'http://localhost:3000',
         methods: ['GET', 'POST'],
