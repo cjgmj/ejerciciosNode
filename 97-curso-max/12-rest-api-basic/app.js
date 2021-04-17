@@ -67,5 +67,10 @@ mongoose
     'mongodb+srv://node:dqoOedTlawu9fJI4@cluster0.a2uzr.mongodb.net/messages?retryWrites=true&w=majority',
     { useNewUrlParser: true, useUnifiedTopology: true }
   )
-  .then(() => app.listen(8080))
+  .then(() => {
+    const server = app.listen(8080);
+
+    const io = require('socket.io')(server);
+    io.in('connetion', (socket) => console.log('Client connected'));
+  })
   .catch((err) => console.log(err));
