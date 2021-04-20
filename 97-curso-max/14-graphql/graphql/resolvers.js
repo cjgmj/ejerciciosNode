@@ -1,4 +1,5 @@
 const bcrypt = require('bcryptjs');
+const validator = require('validator');
 
 const User = require('../models/user');
 
@@ -14,6 +15,24 @@ module.exports = {
   //     const email = args.userInput.email;
   //   },
   createUser: async function ({ userInput }, req) {
+    const errors = [];
+
+    if (!validator.isEmail(userInput.email)) {
+      errors.push({ message: 'E-Mail is invalid.' });
+    }
+
+    if (
+      validator.isEmpty(userInput.password) ||
+      !validator.isLength(userInput.password, { minn: 5 })
+    ) {
+      errors.push({ message: 'Password too short!' });
+    }
+
+    if (errors.length > 0) {
+      const error = new Error('Invalid input.');
+      throw error;
+    }
+
     const existingUser = await User.findOne({ email: userInput.email });
 
     if (existingUser) {
