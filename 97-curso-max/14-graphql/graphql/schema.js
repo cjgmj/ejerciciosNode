@@ -3,13 +3,13 @@ const { buildSchema } = require('graphql');
 // La exclamación en String indica que es obligatorio, si el método no devuelve un String dará error
 // Para indicar que es un array se añade el tipo entre corchetes ([Tipo])
 module.exports = buildSchema(`
-    type TestData {
-        text: String!
-        views: Int!
+    type AuthData {
+        token: String!
+        userId: String!
     }
 
     type RootQuery {
-        hello: TestData!
+        login(email: String!, password: String!): AuthData!
     }
 
     type Post {
