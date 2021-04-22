@@ -162,7 +162,8 @@ class Feed extends Component {
       const imageUrl = fileResData.filePath;
 
       let graphqlQuery = {
-        query: `mutation{
+        query: `
+        mutation {
           createPost(postInput: {title: "${postData.title}", content: "${postData.content}", imageUrl: "${imageUrl}"}) {
             _id
             title
@@ -173,12 +174,14 @@ class Feed extends Component {
             }
             createdAt
           }
-        }`
+        }
+      `
       }
 
       if(this.state.editPost) {
         graphqlQuery = {
-          query: `mutation{
+          query: `
+          mutation {
             updatePost(id: "${this.state.editPost._id}",postInput: {title: "${postData.title}", content: "${postData.content}", imageUrl: "${imageUrl}"}) {
               _id
               title
@@ -189,7 +192,8 @@ class Feed extends Component {
               }
               createdAt
             }
-          }`
+          }
+        `
         }
       }
   
@@ -261,19 +265,28 @@ class Feed extends Component {
 
   deletePostHandler = (postId) => {
     this.setState({ postsLoading: true });
-    fetch(`http://localhost:8080/feed/post/${postId}`, {
-      method: 'DELETE',
+    const graphqlQuery = {
+      query:`
+        mutation {
+          deletePost(id: "${postId}")
+        }
+      `
+    };
+    fetch('http://localhost:8080/graphql', {
+      method: 'POST',
       headers: {
         Authorization: `Bearer ${this.props.token}`,
+        'Content-Type': 'application/json'
       },
+      body: JSON.stringify(graphqlQuery)
     })
       .then((res) => {
-        if (res.status !== 200 && res.status !== 201) {
-          throw new Error('Deleting a post failed!');
-        }
         return res.json();
       })
       .then((resData) => {
+        if (resData.errors) {
+          throw new Error("Deleting the post failed!");
+        }
         console.log(resData);
         this.loadPosts();
       })

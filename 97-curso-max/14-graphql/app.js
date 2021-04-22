@@ -1,5 +1,4 @@
 const path = require('path');
-const fs = require('fs');
 
 const express = require('express');
 const mongoose = require('mongoose');
@@ -12,6 +11,7 @@ const graphqlSchema = require('./graphql/schema');
 const graphqlResolver = require('./graphql/resolvers');
 
 const auth = require('./middleware/auth');
+const { clearImage } = require('./util/file');
 
 const app = express();
 
@@ -72,12 +72,10 @@ app.put('/post-image', (req, res, next) => {
     clearImage(req.body.oldPath);
   }
 
-  return res
-    .status(201)
-    .json({
-      message: 'File stored.',
-      filePath: req.file.path.replace('\\', '/'),
-    });
+  return res.status(201).json({
+    message: 'File stored.',
+    filePath: req.file.path.replace('\\', '/'),
+  });
 });
 
 app.use(
@@ -113,12 +111,7 @@ app.use((error, req, res, next) => {
 mongoose
   .connect(
     'mongodb+srv://node:dqoOedTlawu9fJI4@cluster0.a2uzr.mongodb.net/messages?retryWrites=true&w=majority',
-    { useNewUrlParser: true, useUnifiedTopology: true }
+    { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false }
   )
   .then(() => app.listen(8080))
   .catch((err) => console.log(err));
-
-const clearImage = (filePath) => {
-  filePath = path.join(__dirname, '..', filePath);
-  fs.unlink(filePath, (err) => console.log(err));
-};
