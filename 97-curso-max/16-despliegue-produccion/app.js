@@ -4,6 +4,8 @@ const express = require('express');
 
 const helmet = require('helmet');
 
+const compression = require('compression');
+
 const bodyParser = require('body-parser');
 const multer = require('multer');
 
@@ -51,6 +53,8 @@ const shopRoutes = require('./routes/shop');
 const authRoutes = require('./routes/auth');
 
 app.use(helmet());
+
+app.use(compression());
 
 // Middleware para parsear el cuerpo de las peticiones
 app.use(bodyParser.urlencoded({ extended: false }));
