@@ -1,10 +1,13 @@
 const path = require('path');
+const fs = require('fs');
 
 const express = require('express');
 
 const helmet = require('helmet');
 
 const compression = require('compression');
+
+const morgan = require('morgan');
 
 const bodyParser = require('body-parser');
 const multer = require('multer');
@@ -52,9 +55,19 @@ const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
 const authRoutes = require('./routes/auth');
 
+const accessLogStream = fs.createWriteStream(
+  path.join(__dirname, 'access.log'),
+  {
+    flags: 'a',
+  }
+);
+
 app.use(helmet());
 
 app.use(compression());
+
+// Si no se le pasa el stream lo imprime en consola
+app.use(morgan('combined', { stream: accessLogStream }));
 
 // Middleware para parsear el cuerpo de las peticiones
 app.use(bodyParser.urlencoded({ extended: false }));
