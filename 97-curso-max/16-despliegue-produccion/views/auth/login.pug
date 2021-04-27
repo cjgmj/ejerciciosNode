@@ -1,0 +1,20 @@
+extends ../layouts/main-layout.pug
+
+block styles
+    link(rel="stylesheet", href="/css/forms.css")
+    link(rel="stylesheet", href="/css/auth.css")
+
+block content 
+    each message in errorMessage
+        div.user-message.user-message--error #{message}
+    form.login-form(action="/login", method="post")
+        div.form-control
+            label(for="email") E-Mail
+            input#title(type="email", name="email", value=oldInput.email, class=validationErrors.find(e => e === 'email') ? 'invalid' : '')
+        div.form-control
+            label(for="password") Password
+            input#imageUrl(type="password", name="password", value=oldInput.password, class=validationErrors.find(e => e === 'password') ? 'invalid' : '')
+        input(type="hidden", name="_csrf", value=csrfToken)
+        button.btn(type="submit") Login
+    div.centered
+        a(href="/reset") Reset Password
