@@ -1,5 +1,6 @@
 const path = require('path');
 const fs = require('fs');
+const https = require('https');
 
 const express = require('express');
 
@@ -34,6 +35,9 @@ const store = new MongoDBStore({
 });
 
 const csrfProtection = csrf();
+
+const privateKey = fs.readFileSync('server.key');
+const certificate = fs.readFileSync('server.cert');
 
 const fileStorage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, 'images'),
@@ -148,5 +152,17 @@ app.use('/', (req, res, next) => {
 
 mongoose
   .connect(MONGOBD_URI)
-  .then(() => app.listen(process.env.POST || 3000))
+  .then(
+    () =>
+      https
+        .createServer(
+          {
+            key: privateKey,
+            cert: certificate,
+          },
+          app
+        )
+        .listen(process.env.POST || 3000)
+    // app.listen(process.env.POST || 3000)
+  )
   .catch((err) => console.log(err));
