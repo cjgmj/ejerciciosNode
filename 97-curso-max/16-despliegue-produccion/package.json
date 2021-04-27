@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon app.js"
+    "start": "set MONGO_USER=node&&set MONGO_PASSWORD=dqoOedTlawu9fJI4&&set MONGO_DEFAULT_DATABASE=shop&&set STRIPE_KEY=sk_test_51IcSlYGY5mbZAzKBvuiBWSX5LAwOve5RuFCyA2YBLSpFfUFR85Ms5UF4IUmyHqj17cJriW93LkwA4N1WGqHudWOm00UgYHE6um&&node app.js",
+    "start-server ": "node app.js",
+    "start:dev": "nodemon app.js"
   },
   "keywords": [],
   "author": "cjgmj",

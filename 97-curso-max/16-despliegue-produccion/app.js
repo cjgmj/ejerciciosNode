@@ -17,8 +17,7 @@ const flash = require('connect-flash');
 const errorController = require('./controllers/error');
 const User = require('./models/user');
 
-const MONGOBD_URI =
-  'mongodb+srv://node:dqoOedTlawu9fJI4@cluster0.a2uzr.mongodb.net/shop?retryWrites=true&w=majority';
+const MONGOBD_URI = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0.a2uzr.mongodb.net/${process.env.MONGO_DEFAULT_DATABASE}?retryWrites=true&w=majority`;
 
 const app = express();
 
@@ -128,5 +127,5 @@ app.use('/', (req, res, next) => {
 
 mongoose
   .connect(MONGOBD_URI)
-  .then(() => app.listen(3000))
+  .then(() => app.listen(process.env.POST || 3000))
   .catch((err) => console.log(err));
