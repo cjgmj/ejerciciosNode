@@ -3,10 +3,9 @@ const expect = require('chai').expect;
 const mongoose = require('mongoose');
 
 const User = require('../models/user');
-const UserController = require('../controllers/user');
+const FeedController = require('../controllers/feed');
 
-describe('User Controller', function () {
-  // Se ejecuta antes de ejecutar todos los tests
+describe('Feed Controller', function () {
   before(function (done) {
     mongoose
       .connect(
@@ -28,36 +27,33 @@ describe('User Controller', function () {
       .catch((err) => console.log(err));
   });
 
-  // Se ejecuta después de ejecutar todos los tests
   after(function (done) {
     User.deleteMany({})
       .then(() => mongoose.disconnect())
       .then(() => done());
   });
 
-  // Se ejecuta antes de ejecutar cada test
-  beforeEach(function () {});
-
-  // Se ejecuta después de ejecutar cada test
-  afterEach(function () {});
-
-  it('should send a response with a valid user status for and existing user', function (done) {
-    const req = { userId: '5c0f66b979af55031b34728a' };
-    const res = {
-      statusCode: 500,
-      userStatus: null,
-      status: function (code) {
-        this.statusCode = code;
-        return this;
+  it('should add a created post to the posts of the creator', function (done) {
+    const req = {
+      userId: '5c0f66b979af55031b34728a',
+      body: {
+        title: 'Test Post',
+        content: 'A Test Post',
       },
-      json: function (data) {
-        this.userStatus = data.status;
+      file: {
+        path: 'abc',
       },
     };
+    const res = {
+      status: function () {
+        return this;
+      },
+      json: function () {},
+    };
 
-    UserController.getStatus(req, res, () => {}).then(() => {
-      expect(res.statusCode).to.be.equal(200);
-      expect(res.userStatus).to.be.equal('I am new!');
+    FeedController.createPost(req, res, () => {}).then((savedUser) => {
+      expect(savedUser).to.have.property('posts');
+      expect(savedUser.posts).to.have.length(1);
       done();
     });
   });
