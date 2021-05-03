@@ -1,4 +1,7 @@
-import fs from 'fs';
+// Importación con la otra síntaxis
+// const fs = require('fs').promises;
+
+import fs from 'fs/promises';
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -9,7 +12,13 @@ const __dirname = dirname(__filename);
 export const resHandler = (req, res, next) => {
   // Con el tipo a módulo no existen las variables globales
   // por lo que no podemos usar __dirname
-  res.sendFile(path.join(__dirname, 'my-page.html'));
+  // res.sendFile(path.join(__dirname, 'my-page.html'));
+
+  fs.readFile('my-page.html', 'utf8')
+    .then((data) => {
+      res.send(data);
+    })
+    .catch((err) => console.log(err));
 };
 
 // Para exportar varias cosas se hace sin el 'default'
