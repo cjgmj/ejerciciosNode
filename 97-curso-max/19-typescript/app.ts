@@ -3,8 +3,13 @@ const num2Element = document.getElementById('num2') as HTMLInputElement;
 // Con la ! indica que la propiedad no será nula
 const buttonElement = document.querySelector('button')!;
 
-function add(num1: number, num2: number) {
-  return num1 + num2;
+function add(num1: number | string, num2: number | string) {
+  if (typeof num1 === 'number' && typeof num2 === 'number') {
+    return num1 + num2;
+  } else if (typeof num1 === 'string' && typeof num2 === 'string') {
+    return num1 + ' ' + num2;
+  }
+  return +num1 + +num2;
 }
 
 // console.log(add(1, 6));
@@ -19,6 +24,8 @@ buttonElement.addEventListener('click', () => {
 
   // Con el + delante convierte de string a number
   const result = add(+num1, +num2);
+  const stringResult = add(num1, num2);
 
   console.log(result);
+  console.log(stringResult);
 });
