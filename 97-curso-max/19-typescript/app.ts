@@ -6,7 +6,21 @@ const buttonElement = document.querySelector('button')!;
 const numResults: number[] = [];
 const textResults: string[] = [];
 
-function add(num1: number | string, num2: number | string) {
+type NumOrString = number | string;
+type Result = { val: number; timestamp: Date };
+
+// Diferencias entre type e interface
+// Si solo estás definiendo la estructura de un objeto puedes usar
+// cualquiera de las dos aunque es más común la interfaz.
+// Sin embargo, las interfaces también pueden forzar a las clases
+// a implementar ciertos métodos o funcionalidades.
+// También se puede usar como tipo una clase
+interface ResultObj {
+  val: number;
+  timestamp: Date;
+}
+
+function add(num1: NumOrString, num2: NumOrString) {
   if (typeof num1 === 'number' && typeof num2 === 'number') {
     return num1 + num2;
   } else if (typeof num1 === 'string' && typeof num2 === 'string') {
@@ -21,7 +35,7 @@ function add(num1: number | string, num2: number | string) {
 // Se puede configurar para que no compile si tiene errores
 // console.log(add('1', '6'));
 
-function printResult(resultObj: { val: number; timestamp: Date }) {
+function printResult(resultObj: Result) {
   console.log(resultObj.val);
 }
 
