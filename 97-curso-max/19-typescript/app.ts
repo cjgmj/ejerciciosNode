@@ -3,6 +3,7 @@ const num2Element = document.getElementById('num2') as HTMLInputElement;
 // Con la ! indica que la propiedad no será nula
 const buttonElement = document.querySelector('button')!;
 
+// Array<number> y number[] son el mismo tipo
 const numResults: number[] = [];
 const textResults: string[] = [];
 
@@ -56,3 +57,11 @@ buttonElement.addEventListener('click', () => {
   printResult({ val: result as number, timestamp: new Date() });
   console.log(numResults, textResults);
 });
+
+const myPromise = new Promise<string>((resolve, reject) => {
+  setTimeout(() => {
+    resolve('It worked!');
+  }, 1000);
+});
+
+myPromise.then((result) => console.log(result));
