@@ -1,18 +1,28 @@
 import { Router } from 'https://deno.land/x/oak/mod.ts';
+import { Bson } from 'https://deno.land/x/mongo@v0.22.0/mod.ts';
 
 import { getDb } from '../helpers/db_client.ts';
 
 const router = new Router();
 
 interface Todo {
-  id: string;
+  id?: string;
   text: string;
 }
 
-let todos: Todo[] = [];
+interface TodoSchema {
+  _id: { $oid: string };
+  text: string;
+}
 
-router.get('/todos', (ctx, next) => {
-  ctx.response.body = { todos };
+router.get('/todos', async (ctx, next) => {
+  const todos = await getDb().collection<TodoSchema>('todos').find();
+  const transformedTodos = todos.map((todo: TodoSchema) => ({
+    id: todo._id.$oid,
+    text: todo.text,
+  }));
+
+  ctx.response.body = { todos: transformedTodos };
 });
 
 router.post('/todos', async (ctx, next) => {
@@ -20,33 +30,36 @@ router.post('/todos', async (ctx, next) => {
   const data = await result.value;
 
   const newTodo: Todo = {
-    id: Date.now().toString(),
     text: data.text,
   };
 
-  todos.push(newTodo);
+  const id = await getDb().collection<TodoSchema>('todos').insertOne(newTodo);
+
+  newTodo.id = id.$oid;
 
   ctx.response.status = 201;
   ctx.response.body = { message: 'Todo created!', todo: newTodo };
 });
 
 router.put('/todos/:todoId', async (ctx, next) => {
-  const tid = ctx.params.todoId;
+  const tid = ctx.params.todoId!;
 
   const result = ctx.request.body();
   const data = await result.value;
 
-  const todoIndex = todos.findIndex((todo) => todo.id === tid);
-
-  todos[todoIndex] = { id: todos[todoIndex].id, text: data.text };
+  await getDb()
+    .collection<TodoSchema>('todos')
+    .updateOne({ _id: new Bson.ObjectId(tid) }, { $set: { text: data.text } });
 
   ctx.response.body = { message: 'Updated todo!' };
 });
 
-router.delete('/todos/:todoId', (ctx, next) => {
-  const tid = ctx.params.todoId;
+router.delete('/todos/:todoId', async (ctx, next) => {
+  const tid = ctx.params.todoId!;
 
-  todos = todos.filter((todo) => todo.id !== tid);
+  await getDb()
+    .collection<TodoSchema>('todos')
+    .deleteOne({ _id: new Bson.ObjectId(tid) });
 
   ctx.response.body = { message: 'Todo deleted!' };
 });

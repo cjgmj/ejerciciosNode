@@ -1,3 +1,5 @@
+// deno run --allow-net --allow-read --allow-write --allow-plugin --unstable app.ts
+
 import { Application } from 'https://deno.land/x/oak/mod.ts';
 
 import todosRoutes from './routes/todos.ts';
